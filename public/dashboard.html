@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Server Dashboard</h1>
+  <p>Jumlah klien terhubung: <span id="clientCount">0</span></p>
+  <ul id="clientList"></ul>
+  <button id="showAlert">Show Alert</button>
+
+  <script>
+    const socket = io("http://localhost:3000");
+
+    // Mendengarkan saat terhubung ke server
+    socket.on("connect", () => {
+      console.log("Connected to server with ID:", socket.id);
+    });
+
+    // Listener untuk pesan alert
+    socket.on("alert", (message) => {
+      alert(message); // Menampilkan alert di browser
+    });
+
+    // Kirim pesan ke server saat tombol diklik
+    document.getElementById("sendMessage").addEventListener("click", () => {
+      socket.emit("message", "Hello from client!");
+    });
+
+    // Mendengarkan saat terputus
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+  </script>
+
+</body>
+</html>
